@@ -2,39 +2,12 @@ import './style.css';
 import data from './assets/data/coffees.json';
 
 {
-  // We slaan de gefilterde coffees globaal op
-  // zodat men ze kan terugvinden bij het klikken op een koffie
   let plantBasedCoffees = [];
-  let orders = [];
 
   const init = () => {
     loadCoffees();
   };
 
-  const calculateTotal = () => {
-    if (orders.length > 0) {
-      // Calculate total price
-      const total = orders.reduce((total, order) => {
-        return total + order.coffee.prices.medium * order.amount;
-      }, 0);
-      document.querySelector(`.total__price span`).textContent = total;
-    } else {
-      // No orders => set it to 0
-      document.querySelector(`.total__price span`).textContent = `0`;
-    }
-  };
-
-  const handleClickRemove = e => {
-    const coffeeId = parseInt(e.currentTarget.parentElement.dataset.id);
-
-    // Removee coffee by filtering it out
-    orders = orders.filter(order => {
-      return coffeeId !== order.coffee.id;
-    });
-
-    // Rerender all orders
-    renderOrders();
-  };
 
   const createOrder = order => {
     const $li = document.createElement(`li`);
@@ -53,48 +26,6 @@ import data from './assets/data/coffees.json';
     return $li;
   };
 
-  const renderOrders = () => {
-    if (orders.length > 0) {
-      // Hide empty state & show orders instead
-      document.querySelector(`.orders__wrapper`).classList.remove(`hide`);
-      document.querySelector(`.emptystate`).classList.add(`hide`);
-
-      const $orders = document.querySelector(`.orders`);
-      $orders.innerHTML = ``;
-      orders.forEach(order => {
-        const $li = createOrder(order);
-        $orders.appendChild($li);
-      });
-    } else {
-      // Show empty state
-      document.querySelector(`.orders__wrapper`).classList.add(`hide`);
-      document.querySelector(`.emptystate`).classList.remove(`hide`);
-    }
-
-    calculateTotal();
-  };
-
-  const findOrderByCoffeeId = id => {
-    return orders.find(order => order.coffee.id === id);
-  };
-
-  const addToOrder = coffee => {
-    // Check if coffee is already in order
-    const inorderCoffee = findOrderByCoffeeId(coffee.id);
-
-    if (inorderCoffee) {
-      // Already ordered: update amount
-      inorderCoffee.amount ++;
-    } else {
-      // Newly ordered coffee, add it to list
-      orders.push({
-        amount: 1,
-        coffee: coffee
-      });
-    }
-
-    renderOrders();
-  };
 
   const handleClickLi = e => {
     // We zoeken de aangeklikte item in onze globale array
