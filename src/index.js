@@ -27,29 +27,6 @@ import data from './assets/data/coffees.json';
   };
 
 
-  const handleClickLi = e => {
-    // We zoeken de aangeklikte item in onze globale array
-    const clickedCoffee = plantBasedCoffees.find(coffee => coffee.id === parseInt(e.currentTarget.dataset.id));
-    addToOrder(clickedCoffee);
-  };
-
-  const makeCoffee = coffee => {
-    const $li = document.createElement(`li`);
-    $li.classList.add(`price`);
-    $li.addEventListener(`click`, handleClickLi);
-    $li.dataset.id = coffee.id;
-    $li.innerHTML = `
-      <a class="price__button">
-        <span class="price__button__wrapper">
-          <span class="price__button__name">${coffee.name}</span>
-          <span class="price__button__amount">&euro; ${coffee.prices.medium}</span>
-        </span>
-        <span class="price__button__plus">+</span>
-      </a>
-    `;
-    document.querySelector(`.prices__list`).appendChild($li);
-  };
-
   const showCoffees = coffees => {
     coffees.forEach(coffee => {
       makeCoffee(coffee);
